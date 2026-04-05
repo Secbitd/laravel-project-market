@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Profile;
 use App\Http\Controllers\ServiceProviderController;
+use App\Http\Controllers\OrderController;
 
 // главная
 Route::get('/', function () {
@@ -44,3 +45,55 @@ Route::prefix('service')->middleware('auth')->group(function () {
   Route::get('/create', [ServiceProviderController::class, 'create'])->name('service.create');
   Route::post('/store', [ServiceProviderController::class, 'store'])->name('service.store');
 });
+
+// Заказы и маркетплейс
+Route::prefix('orders')->group(function () {
+  // создание заказа
+  Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
+  
+  // обработка формы заказа
+  Route::post('/store', [OrderController::class, 'store'])->name('orders.store');
+  
+  // лента заказов
+  Route::get('/feed', [OrderController::class, 'feed'])->name('orders.feed');
+  
+  // мои заказы
+  Route::get('/my', [OrderController::class, 'my'])->name('orders.my');
+  
+  // детальная страница заказа
+  Route::get('/{id}', [OrderController::class, 'detail'])->name('orders.detail');
+});
+
+// Исполнители
+Route::prefix('performers')->group(function () {
+  // список исполнителей
+  Route::get('/', function () {
+    return view('performers.index');
+  })->name('performers.index');
+  
+  // профиль исполнителя
+  Route::get('/{id}', function ($id) {
+    return view('performers.profile', ['performerId' => $id]);
+  })->name('performers.profile');
+});
+
+// Сообщения
+Route::prefix('messages')->group(function () {
+  Route::get('/', function () {
+    return view('messages.index');
+  })->name('messages.index');
+  
+  Route::get('/{id}', function ($id) {
+    return view('messages.chat', ['chatId' => $id]);
+  })->name('messages.chat');
+});
+
+// Категории
+Route::get('/category/{slug}', function ($slug) {
+  return view('category', ['categorySlug' => $slug]);
+})->name('category');
+
+// Поиск
+Route::get('/search', function () {
+  return view('search');
+})->name('search');

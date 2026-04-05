@@ -1,11 +1,6 @@
-@extends('componet.shablon')
+@extends('layouts.app')
 
-<!-- HEAD ADD CONTENT -->
-@section('title', 'Найдите лучших специалистов')
-@section('description', 'Платформа для поиска профессионалов и специалистов')
-
-<!-- BODY CONTENT -->
-@section('content')
+@section('title', 'Главная')
 
   <!-- BANNER -->
   <section
